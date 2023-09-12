@@ -84,4 +84,66 @@ const deleteByTitle = async (req, res) => {
   }
 };
 
-module.exports = { addaBook, listAllBooks, updateAuthor, deleteByTitle };
+const getBookByTitle = async (req, res) => {
+  try {
+    const bookFound = await Book.find({ title: req.params.title });
+    console.log(bookFound);
+    const successMessage = {
+      message: "Book Found!",
+      book: bookFound,
+    };
+    res.status(200).json(successMessage);
+  } catch (error) {
+    console.log(error);
+    const errorMessage = {
+      message: "Error Occured",
+      error: error,
+    };
+
+    res.status(501).json(errorMessage);
+  }
+};
+
+const updateByTitle = async (req, res) => {
+  try {
+    const filter = { title: req.params.title };
+    const update = req.body;
+    const book = await Book.findOneAndUpdate(filter, update, { returnOriginal: false });
+
+    const successMessage = {
+      message: "Book succesfully updated",
+      updatedBook: book,
+    };
+
+    res.status(200).json(successMessage);
+  } catch (error) {
+    console.log(error);
+    const errorResponse = {
+      message: "Error Ocuured",
+      error: error,
+    };
+    res.status(501).json(errorResponse);
+  }
+};
+
+const deleteAll = async (req, res) => {
+  try {
+    const deleted = await Book.deleteMany({});
+
+    const successMessage = {
+      message: "All books succesfully deleted",
+      deletedBooks: deleted,
+    };
+
+    res.status(200).json(successMessage);
+  } catch (error) {
+    console.log(error);
+    const errorResponse = {
+      message: "Error Ocuured",
+      error: error,
+    };
+    res.status(501).json(errorResponse);
+  }
+};
+
+module.exports = { addaBook, listAllBooks, updateAuthor, deleteByTitle, getBookByTitle, updateByTitle, deleteAll };
