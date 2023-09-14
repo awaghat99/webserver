@@ -67,7 +67,7 @@ const updateAuthor = async (req, res) => {
 
 const deleteByTitle = async (req, res) => {
   try {
-    const filter = { title: req.body.title };
+    const filter = { title: req.params.title};
     await Book.deleteOne(filter);
 
     const successMessage = {
